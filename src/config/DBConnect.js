@@ -1,7 +1,8 @@
 import Mongoose from "mongoose";
+import Dotenv from "dotenv";
 
-const url =
-  "mongodb+srv://ramesh:ramesh@cluster0.edkbh.mongodb.net/advance-mern?retryWrites=true&w=majority";
+Dotenv.config();
+const url = process.env.DB_URL;
 export const DBConnect = async () => {
   try {
     await Mongoose.connect(url);

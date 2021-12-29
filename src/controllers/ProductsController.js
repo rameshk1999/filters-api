@@ -15,6 +15,49 @@ export const getAllProducts = async (req, res) => {
   }
 };
 
+export const getByPrice = async (req, res) => {
+  try {
+    //BUILD QUERY
+    let query;
+
+    // 1A) Filtering
+    const queryObj = { ...req.query };
+    const excludedFields = ["page", "sort", "limit", "fields"];
+    excludedFields.forEach((el) => delete queryObj[el]);
+
+    //1B) Advanced filtering
+    let queryString = JSON.stringify(queryObj);
+    const check = queryString;
+    queryString = queryString.replace(
+      /\b(gte|gt|lte|lt|in)\b/g,
+      (match) => `$${match}`
+    );
+    query = ProductModel.find(JSON.parse(queryString));
+    // query = ProductModel.find({ price: { $lte: "100" } });
+    console.log(queryObj, check, queryString, JSON.parse(queryString));
+    // 2) Sorting
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(",").join(" ");
+      query = query.sort(sortBy);
+    } else {
+      query = query.sort("-price");
+    }
+
+    const products = await query;
+    console.log(products);
+    res.status(200).json({
+      data: products,
+      length: products.length,
+      status: 200,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      msg: error.message,
+      status: 500,
+    });
+  }
+};
+
 export const createMany = async (req, res) => {
   try {
     await ProductModel.insertMany([

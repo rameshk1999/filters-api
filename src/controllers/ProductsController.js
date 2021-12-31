@@ -58,6 +58,33 @@ export const getByPrice = async (req, res) => {
   }
 };
 
+export const getByCategory = async (req, res) => {
+  try {
+    let categories;
+    categories = req.body;
+    let mycategories =
+      categories && categories.length && categories.map((item) => item);
+    let mycategories1 =
+      categories && categories.length && categories.map((item) => item);
+    //  console.log(categories, req.body);
+    // const category = req.body.category;
+    console.log(req.body, mycategories1);
+    // console.log(categories, mycategories1);
+    // res.json(category);
+    const products = await ProductModel.find({ category: mycategories });
+    //console.log(products);
+    res.status(200).json({
+      data: products,
+      status: 200,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      msg: error.message,
+      status: 500,
+    });
+  }
+};
+
 export const createMany = async (req, res) => {
   try {
     await ProductModel.insertMany([

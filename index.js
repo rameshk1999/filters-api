@@ -3,6 +3,7 @@ import Cors from "cors";
 import Dotenv from "dotenv";
 import { DBConnect } from "./src/config/DBConnect.js";
 import productRouter from "./src/routes/productRouter.js";
+import categoryRouter from "./src/routes/categoryRouter.js";
 
 Dotenv.config();
 const app = Express();
@@ -27,3 +28,4 @@ app.get("/", (req, res) => {
   });
 });
 app.use("/products", productRouter);
+app.use("/categories", categoryRouter);
